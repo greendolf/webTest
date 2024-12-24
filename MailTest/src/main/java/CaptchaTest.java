@@ -7,7 +7,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
 
-public class MainClass {
+public class CaptchaTest {
     @Test
     public void FirstTest() {
         ChromeOptions options = new ChromeOptions();
@@ -48,14 +48,16 @@ public class MainClass {
         // войти
         driver.findElement(By.xpath("//button[@data-test-id='submit-button']")).click();
 
-        driver.switchTo().frame(0);
+        // выйти из фрейма авторизации
+        String handle = driver.getWindowHandle();
+        driver.switchTo().window(handle);
 
         // проверить содержимое
-        Assert.assertEquals("Восстановление доступа", driver.findElement(By.xpath("//div[@data-test-id='method-wizard-2-page']/h1")).getText());
+        Assert.assertEquals("Хотим убедиться, что это вы", driver.findElement(By.xpath("//h1[@data-test-id='header-text-recaptcha-inter']")).getText());
 
         // нажать "назад"
-        driver.findElement(By.className("innerText-0-2-103 inner-0-2-101")).click();
-        driver.findElement(By.className("innerText-0-2-103 inner-0-2-101")).click();
+        driver.findElement(By.xpath("//button[@data-test-id='recaptcha-inter-back']")).click();
+        //driver.findElement(By.className("innerText-0-2-103 inner-0-2-101")).click();
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
